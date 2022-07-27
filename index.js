@@ -4,8 +4,13 @@ const { Server } = require("socket.io");
 const { Konsole } = require('./Konsole.js')
 const colors = require('colors')
 const fs = require('fs')
+const showdown  = require('showdown')
+const markdown = new showdown.Converter()
 
-let html = fs.readFileSync('./readme.html')
+let md = fs.readFileSync('./readme.md', {encoding:'utf8'})
+let html = `<body style='overflow:hidden;background: black; color: white;'>
+    <div style='font-family: arial;padding:100px;width: 800px;'>${markdown.makeHtml(md)}</div>
+  </body>`
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
