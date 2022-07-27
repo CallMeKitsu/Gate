@@ -5,10 +5,13 @@ const { Konsole } = require('./Konsole.js')
 const colors = require('colors')
 const fs = require('fs')
 
+let html = fs.readFileSync('./readme.html')
+
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  res.end("Gate Server Side");
+  res.setHeader("Content-Type", "text/html")
+  res.write(html)
+  res.end();
 })
 
 server.listen(3000)
