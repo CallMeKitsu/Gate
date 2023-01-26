@@ -1,9 +1,11 @@
-const http = require("http");
 const { Tree } = require('./Tree.js')
 const { Server } = require("socket.io");
 const { Konsole } = require('./Konsole.js')
 const colors = require('colors')
+
 const fs = require('fs')
+const express = require('express')
+const app = express()
 const showdown = require('showdown')
 const markdown = new showdown.Converter()
 
@@ -12,20 +14,31 @@ let html = `<body style='overflow:hidden;background: black; color: white;'>
     <div style='font-family: arial;padding:100px;width: 800px;'>${markdown.makeHtml(md)}</div>
   </body>`
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/html")
-  res.write(html)
-  res.end();
+app.use('/docs', (req, res) => {
+  res.set('Content-Type', 'text/html');
+  res.send(Buffer.from(html));
 })
 
-server.listen(3000)
+app.use('/dl', express.static('./download'))
+app.use('/', express.static('./public'))
+
+const server = app.listen(3000)
 const io = new Server(server);
 
 let socket_id = "none"
 let konsole = new Konsole()
 konsole.socket = socket_id
 let socket_infos = new Map()
+
+function freshData() {
+  io.to(socket_id).emit('info')
+  app.use('/sockets', (req, res) => {
+    res.set('Content-Type', 'application/json');
+    let data = Array.from(socket_infos)
+    let string = JSON.stringify(data)
+    res.send(Buffer.from(string));
+  })
+}
 
 io.on('connection', socket => {
 
@@ -153,3 +166,5 @@ konsole.callback = function(str) {
   }
 
 }
+
+freshData()

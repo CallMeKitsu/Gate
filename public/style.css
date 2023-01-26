@@ -1,0 +1,54 @@
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+}
+
+* {
+  font-family: "Poppins";
+}
+
+#main {
+  margin: auto;
+  width: 900px;
+}
+
+table {
+  border-collapse: collapse;
+  border-radius: 15px;
+}
+
+th {
+  padding: 10px 20px;
+}
+
+thead {
+  background: linear-gradient(90deg, #0084ffee, #33d6ffee);
+  color: white;
+}
+
+#sockets {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: fit-content;
+}
+
+.socket {
+  background: #e3edf2dd;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 100ms ease-in-out;
+  width: 100%;
+}
+
+.socket:hover {
+  background: #c9d4d9dd;
+  transform: translateX(5px);
+}
+
+.socket span {
+  padding: 10px 20px;
+  display: inline-block;
+}
