@@ -1,5 +1,6 @@
 function display() {
   let sockets = JSON.parse(get('https://gate-serv.kitsuforyou.repl.co/sockets'))
+  document.querySelector(`#sockets`).innerHTML  = ""
 
   for(let socket of sockets) {
     let ID = socket[0]
@@ -15,5 +16,5 @@ function display() {
 }
 
 setInterval(() => {
-  window.location.reload()
+  display()
 }, 5000)
