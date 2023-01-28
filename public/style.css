@@ -1,5 +1,7 @@
 :root {
   --gradient: linear-gradient(90deg, #0084ffee, #33d6ffee);
+  --darker: #c9d4d9dd;
+  --regular: #e3edf2dd;
 }
 
 body, html {
@@ -27,16 +29,10 @@ body, html {
 }
 
 .socket {
-  background: #e3edf2dd;
-  cursor: pointer;
+  background: var(--regular);
   border-radius: 10px;
   transition: all 100ms ease-in-out;
   width: 100%;
-}
-
-.socket:hover {
-  background: #c9d4d9dd;
-  transform: translateX(5px);
 }
 
 .socket span {
@@ -46,8 +42,38 @@ body, html {
 
 #render {
   width: 900px;
-  min-height: 500px;
+  height: 700px;
   outline: 1px solid #44adfd;
   border-radius: 15px;
   margin-bottom: 50px;
+  position: relative;
+}
+
+ion-icon {
+  padding: 7px;
+  vertical-align: middle;
+  background: var(--regular);
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+ion-icon:hover {
+  cursor: pointer;
+  background: var(--darker);
+}
+
+#render-img {
+  width: 100%;
+  height: 100%;
+}
+
+.render-text {
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  font-size: 0.7em;
+  overflow-y: scroll;
+  overflow-X: hidden;
+  height: 80%;
+  width: 750px;
 }
