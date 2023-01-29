@@ -41,8 +41,8 @@ body, html {
 }
 
 #render {
-  width: 900px;
-  height: 700px;
+  width: 60%;
+  height: 50%;
   outline: 1px solid #44adfd;
   border-radius: 15px;
   margin-bottom: 50px;
@@ -75,5 +75,5 @@ ion-icon:hover {
   overflow-y: scroll;
   overflow-X: hidden;
   height: 80%;
-  width: 750px;
+  width: 80%;
 }

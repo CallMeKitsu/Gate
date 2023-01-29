@@ -2,7 +2,12 @@ let SOCKETS_N = 0
 
 function display() {
   let sockets = JSON.parse(get('https://gate-serv.kitsuforyou.repl.co/sockets'))
-  SOCKETS_N = sockets.length
+  
+  if(sockets.length == 0) {
+    document.querySelector(`#sockets`).innerHTML = "No sockets"
+    return
+  }
+  
   document.querySelector(`#sockets`).innerHTML  = ""
 
   for(let socket of sockets) {
