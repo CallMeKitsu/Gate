@@ -10,8 +10,10 @@ function display() {
   
   document.querySelector(`#sockets`).innerHTML  = ""
 
-  for(let socket of sockets) {
+  for(let s=0; s < sockets.length; s++) {
+    let socket = sockets[s]
     document.querySelector(`#sockets`).innerHTML += `<div class="socket">
+      <span>${socket.shard || "🔹"}</span>
       <span>${socket.id}</span>
       <span>${socket.ip}</span>
       <span>${socket.host}</span>
@@ -48,5 +50,6 @@ function kill(id) {
   let url = `https://gate-serv.kitsuforyou.repl.co/do/kill/${id}`
   if(confirm(`Do you really want to kill this socket ? This action is irreversible.`)) {
     get(url)
+    document.querySelector('#render').innerHTML = loading
   }
 }
