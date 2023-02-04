@@ -1,8 +1,15 @@
-const { Tree } = require('./Tree.js')
 const { Server } = require("socket.io");
 const fs = require('fs')
 const express = require('express')
 const app = express()
+const cors = require('cors');
+
+app.use(cors({
+  origin: [
+    'https://callmekitsu.com/', 
+    'https://gate-serv.kitsuforyou.repl.co'
+  ]
+}))
 
 app.use('/docs', (req, res) => {
   const showdown = require('showdown')

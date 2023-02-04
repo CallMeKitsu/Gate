@@ -1,9 +1,17 @@
 :root {
-  --blue: #44adfd;
+  --blue: #3A71C1;
   --gradient: linear-gradient(90deg, #0084ffee, var(--blue));
-  --darker: #c9d4d9dd;
-  --regular: #e3edf2dd;
+  --darkest: #0F1014;
+  --darker: #191A21;
+  --regular: #14151B;
   --spacing: 15px;
+  --font: #95989D;
+  
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("cdn/poppins.ttf");
 }
 
 body, html {
@@ -11,10 +19,12 @@ body, html {
   width: 100%;
   margin: 0px;
   overflow: hidden;
+  background: var(--darkest);
 }
 
 * {
   font-family: "Poppins";
+  color: var(--font);
 }
 
 #main {
@@ -94,7 +104,7 @@ ion-icon:hover {
   overflow-X: hidden;
   height: 80%;
   width: 80%;
-  background: white;
+  background: var(--font);
 }
 
 #loading {
@@ -112,9 +122,12 @@ h1, h2, h3, h4 {
   margin: 0px;
 }
 
+h1{
+  color: white;
+}
+
 h3 {
   font-size: 1.1em;
-  color: grey;
   font-weight: normal
 }
 
